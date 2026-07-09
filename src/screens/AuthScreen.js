@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 
@@ -61,6 +62,7 @@ const AuthScreen = ({ navigation }) => {
         const data = await res.json();
         
         if (res.ok) {
+          await AsyncStorage.setItem('userToken', data.accessToken || 'dummy_token');
           navigation.replace('MainApp');
         } else {
           setErrors({ ...errors, password: data.message || 'Login gagal' });

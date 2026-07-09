@@ -1,9 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomButton from '../components/CustomButton';
 
 const ProfileScreen = ({ navigation }) => {
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem('userToken');
     // Kembali ke AuthStack (Login)
     navigation.replace('Auth');
   };

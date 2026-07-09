@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { View, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -67,8 +69,35 @@ const MainTabs = () => {
 };
 
 const AppNavigator = () => {
+  const [isReady, setIsReady] = useState(false);
+  const [initialRoute, setInitialRoute] = useState('Auth');
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('userToken');
+        if (token !== null) {
+          setInitialRoute('MainApp');
+        }
+      } catch (e) {
+        console.error('Failed to load token', e);
+      } finally {
+        setIsReady(true);
+      }
+    };
+    checkLoginStatus();
+  }, []);
+
+  if (!isReady) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#EC4899" />
+      </View>
+    );
+  }
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Auth" component={AuthScreen} />
       <Stack.Screen name="MainApp" component={MainTabs} />
       <Stack.Screen 
