@@ -43,35 +43,10 @@ const AuthScreen = ({ navigation }) => {
     return valid;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (validate()) {
-      try {
-        setLoading(true);
-        // Simulasi login menggunakan API DummyJSON
-        // DummyJSON hanya menerima username, jadi kita paksa menggunakan akun 'emilys' 
-        // agar simulasi API request berhasil.
-        const res = await fetch('https://dummyjson.com/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            username: 'emilys', 
-            password: 'emilyspass',
-          }),
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-          // Berhasil login
-          navigation.replace('MainApp');
-        } else {
-          setErrors({ ...errors, password: data.message || 'Login gagal' });
-        }
-      } catch (err) {
-        alert('Gagal terhubung ke server');
-      } finally {
-        setLoading(false);
-      }
+      // Simulasi proses login/register berhasil
+      navigation.replace('MainApp');
     }
   };
 
@@ -120,7 +95,6 @@ const AuthScreen = ({ navigation }) => {
           <CustomButton 
             title={isLogin ? 'Masuk' : 'Daftar'} 
             onPress={handleSubmit} 
-            loading={loading}
           />
 
           <CustomButton 

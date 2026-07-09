@@ -1,42 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { products, categories } from '../data/mockData';
 import ProductCard from '../components/ProductCard';
 
 const HomeScreen = ({ navigation }) => {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState(['Semua']);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Semua');
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  
-  // State for API
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const response = await fetch('https://dummyjson.com/products');
-        if (!response.ok) {
-          throw new Error('Gagal mengambil data dari server');
-        }
-        const data = await response.json();
-        setProducts(data.products);
-        
-        // Extract unique categories
-        const uniqueCategories = ['Semua', ...new Set(data.products.map(item => item.category))];
-        setCategories(uniqueCategories);
-      } catch (err) {
-        setError(err.message || 'Terjadi kesalahan');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  const [filteredProducts, setFilteredProducts] = useState(products);
 
   useEffect(() => {
     let result = products;
@@ -45,11 +15,11 @@ const HomeScreen = ({ navigation }) => {
     }
     if (searchQuery.trim() !== '') {
       result = result.filter(p => 
-        p.title.toLowerCase().includes(searchQuery.toLowerCase())
+        p.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
     setFilteredProducts(result);
-  }, [searchQuery, selectedCategory, products]);
+  }, [searchQuery, selectedCategory]);
 
   const handleProductPress = (product) => {
     navigation.navigate('Detail', { product });
@@ -91,46 +61,18 @@ const HomeScreen = ({ navigation }) => {
         </ScrollView>
       </View>
 
-      {isLoading ? (
-        <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#6366F1" />
-          <Text style={styles.statusText}>Sedang memuat data...</Text>
-        </View>
-      ) : error ? (
-        <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>Gagal: {error}</Text>
-          <TouchableOpacity style={styles.retryButton} onPress={() => {
-            setIsLoading(true);
-            setError(null);
-            fetch('https://dummyjson.com/products')
-              .then(res => res.json())
-              .then(data => {
-                setProducts(data.products);
-                setCategories(['Semua', ...new Set(data.products.map(item => item.category))]);
-                setIsLoading(false);
-              })
-              .catch(err => {
-                setError(err.message);
-                setIsLoading(false);
-              });
-          }}>
-            <Text style={styles.retryText}>Coba Lagi</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <FlatList
-          data={filteredProducts}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <ProductCard product={item} onPress={handleProductPress} />}
-          numColumns={2}
-          contentContainerStyle={styles.productList}
-          ListEmptyComponent={
-            <View style={styles.centerContainer}>
-              <Text style={styles.emptyText}>Produk tidak ditemukan</Text>
-            </View>
-          }
-        />
-      )}
+      <FlatList
+        data={filteredProducts}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ProductCard product={item} onPress={handleProductPress} />}
+        numColumns={2}
+        contentContainerStyle={styles.productList}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Produk tidak ditemukan</Text>
+          </View>
+        }
+      />
     </View>
   );
 };
@@ -179,7 +121,7 @@ const styles = StyleSheet.create({
   productList: {
     padding: 8,
   },
-  centerContainer: {
+  emptyContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -189,26 +131,6 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     fontSize: 16,
   },
-  statusText: {
-    marginTop: 10,
-    color: '#6366F1',
-    fontSize: 16,
-  },
-  errorText: {
-    color: '#EF4444',
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  retryButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#6366F1',
-    borderRadius: 8,
-  },
-  retryText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  }
 });
 
 export default HomeScreen;

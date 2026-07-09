@@ -8,12 +8,12 @@ const DetailScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Image source={{ uri: product.thumbnail }} style={styles.image} />
+        <Image source={{ uri: product.image }} style={styles.image} />
         
         <View style={styles.infoContainer}>
           <Text style={styles.category}>{product.category}</Text>
-          <Text style={styles.name}>{product.title}</Text>
-          <Text style={styles.price}>$ {product.price}</Text>
+          <Text style={styles.name}>{product.name}</Text>
+          <Text style={styles.price}>Rp {product.price.toLocaleString('id-ID')}</Text>
           
           <View style={styles.divider} />
           
