@@ -43,10 +43,33 @@ const AuthScreen = ({ navigation }) => {
     return valid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validate()) {
-      // Simulasi proses login/register berhasil
-      navigation.replace('MainApp');
+      try {
+        setLoading(true);
+        // Simulasi login menggunakan API DummyJSON
+        // DummyJSON hanya menerima username, jadi kita paksa menggunakan akun 'emilys'
+        const res = await fetch('https://dummyjson.com/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: 'emilys', 
+            password: 'emilyspass',
+          }),
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          navigation.replace('MainApp');
+        } else {
+          setErrors({ ...errors, password: data.message || 'Login gagal' });
+        }
+      } catch (err) {
+        alert('Gagal terhubung ke server');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
