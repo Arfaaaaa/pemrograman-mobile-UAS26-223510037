@@ -93,7 +93,7 @@ const HomeScreen = ({ navigation }) => {
 
       {isLoading ? (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#6366F1" />
+          <ActivityIndicator size="large" color="#EC4899" />
           <Text style={styles.statusText}>Sedang memuat data...</Text>
         </View>
       ) : error ? (
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   categoryChipSelected: {
-    backgroundColor: '#6366F1',
+    backgroundColor: '#EC4899', // Pink
   },
   categoryText: {
     color: '#4B5563',
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     marginTop: 10,
-    color: '#6366F1',
+    color: '#EC4899', // Pink
     fontSize: 16,
   },
   errorText: {
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   retryButton: {
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#6366F1',
+    backgroundColor: '#EC4899', // Pink
     borderRadius: 8,
   },
   retryText: {

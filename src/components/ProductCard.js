@@ -9,7 +9,7 @@ const ProductCard = ({ product, onPress }) => {
         <Text style={styles.name} numberOfLines={1}>{product.title}</Text>
         <Text style={styles.category}>{product.category}</Text>
         <Text style={styles.price}>
-          $ {product.price}
+          Rp {(product.price * 16000).toLocaleString('id-ID')}
         </Text>
       </View>
     </TouchableOpacity>
@@ -22,13 +22,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flex: 1,
     margin: 8,
-    shadowColor: '#000',
+    shadowColor: '#EC4899', // Aksen pink pada bayangan
     shadowOpacity: 0.1,
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
     overflow: 'hidden',
     maxWidth: '48%', // For 2 columns layout
+    borderBottomWidth: 2, // Garis pink di bawah
+    borderBottomColor: '#FBCFE8', // Garis pink lembut
   },
   image: {
     width: '100%',
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#6366F1',
+    color: '#EC4899', // Pink accent
   },
 });
 

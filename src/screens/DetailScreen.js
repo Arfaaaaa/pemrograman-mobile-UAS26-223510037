@@ -9,23 +9,23 @@ const DetailScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Image source={{ uri: product.thumbnail }} style={styles.image} />
-        
+
         <View style={styles.infoContainer}>
           <Text style={styles.category}>{product.category}</Text>
           <Text style={styles.name}>{product.title}</Text>
-          <Text style={styles.price}>$ {product.price}</Text>
-          
+          <Text style={styles.price}>Rp {(product.price * 18000).toLocaleString('id-ID')}</Text>
+
           <View style={styles.divider} />
-          
+
           <Text style={styles.descTitle}>Deskripsi Produk</Text>
           <Text style={styles.description}>{product.description}</Text>
         </View>
       </ScrollView>
 
       <View style={styles.bottomBar}>
-        <CustomButton 
-          title="Tambah ke Keranjang" 
-          onPress={() => alert('Produk ditambahkan ke keranjang')} 
+        <CustomButton
+          title="Tambah ke Keranjang"
+          onPress={() => alert('Produk ditambahkan ke keranjang')}
         />
       </View>
     </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   price: {
-    color: '#6366F1',
+    color: '#EC4899',
     fontSize: 20,
     fontWeight: 'bold',
   },

@@ -13,7 +13,7 @@ const CustomButton = ({ title, onPress, type = 'primary', loading = false, disab
       disabled={disabled || loading}
     >
       {loading ? (
-        <ActivityIndicator color={type === 'primary' ? '#fff' : '#6366F1'} />
+        <ActivityIndicator color={type === 'primary' ? '#fff' : '#EC4899'} />
       ) : (
         <Text
           style={[
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   primaryBg: {
-    backgroundColor: '#6366F1',
+    backgroundColor: '#EC4899', // Pink
   },
   secondaryBg: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#6366F1',
+    borderColor: '#EC4899', // Pink
   },
   disabledBg: {
     backgroundColor: '#E5E7EB',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   secondaryText: {
-    color: '#6366F1',
+    color: '#EC4899', // Pink
   },
 });
 
