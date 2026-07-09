@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Platform, Alert } from 'react-native';
 import { CartContext } from '../context/CartContext';
 import CustomButton from '../components/CustomButton';
 
