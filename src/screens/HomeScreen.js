@@ -18,15 +18,24 @@ const HomeScreen = ({ navigation }) => {
       try {
         setIsLoading(true);
         setError(null);
-        const response = await fetch('https://dummyjson.com/products');
+        const response = await fetch('https://dummyjson.com/products?limit=150');
         if (!response.ok) {
           throw new Error('Gagal mengambil data dari server');
         }
         const data = await response.json();
-        setProducts(data.products);
         
-        // Extract unique categories
-        const uniqueCategories = ['Semua', ...new Set(data.products.map(item => item.category))];
+        // Filter out cosmetic, fragrances, groceries to match "KampusMarket" theme
+        const allowedCategories = [
+          'laptops', 'smartphones', 'tablets', 'mobile-accessories', 
+          'mens-shirts', 'womens-bags', 'sports-accessories', 
+          'mens-shoes', 'womens-shoes', 'mens-watches', 'womens-watches'
+        ];
+        const campusProducts = data.products.filter(item => allowedCategories.includes(item.category));
+        
+        setProducts(campusProducts);
+        
+        // Extract unique categories from filtered products
+        const uniqueCategories = ['Semua', ...new Set(campusProducts.map(item => item.category))];
         setCategories(uniqueCategories);
       } catch (err) {
         setError(err.message || 'Terjadi kesalahan');
@@ -102,11 +111,17 @@ const HomeScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.retryButton} onPress={() => {
             setIsLoading(true);
             setError(null);
-            fetch('https://dummyjson.com/products')
+            fetch('https://dummyjson.com/products?limit=150')
               .then(res => res.json())
               .then(data => {
-                setProducts(data.products);
-                setCategories(['Semua', ...new Set(data.products.map(item => item.category))]);
+                const allowedCategories = [
+                  'laptops', 'smartphones', 'tablets', 'mobile-accessories', 
+                  'mens-shirts', 'womens-bags', 'sports-accessories', 
+                  'mens-shoes', 'womens-shoes', 'mens-watches', 'womens-watches'
+                ];
+                const campusProducts = data.products.filter(item => allowedCategories.includes(item.category));
+                setProducts(campusProducts);
+                setCategories(['Semua', ...new Set(campusProducts.map(item => item.category))]);
                 setIsLoading(false);
               })
               .catch(err => {

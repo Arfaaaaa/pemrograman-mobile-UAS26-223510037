@@ -1,9 +1,20 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, Alert, Platform } from 'react-native';
 import CustomButton from '../components/CustomButton';
+import { CartContext } from '../context/CartContext';
 
 const DetailScreen = ({ route, navigation }) => {
   const { product } = route.params;
+  const { addToCart } = useContext(CartContext);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    if (Platform.OS === 'web') {
+      alert('Produk berhasil ditambahkan ke keranjang!');
+    } else {
+      Alert.alert('Sukses', 'Produk berhasil ditambahkan ke keranjang!');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -25,7 +36,7 @@ const DetailScreen = ({ route, navigation }) => {
       <View style={styles.bottomBar}>
         <CustomButton
           title="Tambah ke Keranjang"
-          onPress={() => alert('Produk ditambahkan ke keranjang')}
+          onPress={handleAddToCart}
         />
       </View>
     </View>
