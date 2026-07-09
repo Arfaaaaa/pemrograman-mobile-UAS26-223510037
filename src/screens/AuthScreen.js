@@ -11,6 +11,8 @@ const AuthScreen = ({ navigation }) => {
   
   const [errors, setErrors] = useState({});
 
+  const [loading, setLoading] = useState(false);
+
   const validate = () => {
     let valid = true;
     let newErrors = {};
@@ -41,10 +43,35 @@ const AuthScreen = ({ navigation }) => {
     return valid;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validate()) {
-      // Simulasi proses login/register berhasil
-      navigation.replace('MainApp');
+      try {
+        setLoading(true);
+        // Simulasi login menggunakan API DummyJSON
+        // DummyJSON hanya menerima username, jadi kita paksa menggunakan akun 'emilys' 
+        // agar simulasi API request berhasil.
+        const res = await fetch('https://dummyjson.com/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: 'emilys', 
+            password: 'emilyspass',
+          }),
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+          // Berhasil login
+          navigation.replace('MainApp');
+        } else {
+          setErrors({ ...errors, password: data.message || 'Login gagal' });
+        }
+      } catch (err) {
+        alert('Gagal terhubung ke server');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -55,7 +82,7 @@ const AuthScreen = ({ navigation }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerContainer}>
-          <Text style={styles.title}>{isLogin ? 'Selamat Datang Kembali' : 'Buat Akun Baru'}</Text>
+          <Text style={styles.title}>KampusMarket</Text>
           <Text style={styles.subtitle}>
             {isLogin ? 'Silakan masuk untuk melanjutkan' : 'Daftar untuk mulai berbelanja'}
           </Text>
@@ -93,6 +120,7 @@ const AuthScreen = ({ navigation }) => {
           <CustomButton 
             title={isLogin ? 'Masuk' : 'Daftar'} 
             onPress={handleSubmit} 
+            loading={loading}
           />
 
           <CustomButton 

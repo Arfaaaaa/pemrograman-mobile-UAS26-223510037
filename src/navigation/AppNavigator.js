@@ -36,7 +36,7 @@ const MainTabs = () => {
       <Tab.Screen 
         name="Home" 
         component={HomeScreen} 
-        options={{ title: 'Katalog' }} 
+        options={{ title: 'KampusMarket' }} 
       />
       <Tab.Screen 
         name="Cart" 
